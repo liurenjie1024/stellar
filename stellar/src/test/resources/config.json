@@ -1,0 +1,14 @@
+{
+ "server": {
+   "port": 8090
+ },
+  "iceberg": {
+    "catalog": {
+      "class-name": "Test",
+      "properties": {
+        "a": "b",
+        "c": "d"
+      }
+    }
+  }
+}

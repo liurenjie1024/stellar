@@ -15,6 +15,7 @@ lazy val rootProject = (project in file(".")).settings(
       "org.apache.iceberg" % "iceberg-core" % icebergVersion,
       "ch.qos.logback" % "logback-classic" % "1.2.10",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
+      "com.github.pureconfig" %% "pureconfig" % "0.17.4",
       "com.softwaremill.sttp.tapir" %% "tapir-sttp-stub-server" % tapirVersion % Test,
       "org.scalatest" %% "scalatest" % "3.2.16" % Test,
       "com.softwaremill.sttp.client3" %% "upickle" % "3.8.15" % Test

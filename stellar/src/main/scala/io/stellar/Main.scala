@@ -9,6 +9,7 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.io.StdIn
 import ExecutionContext.Implicits.global
 
+
 object App {
   private val logger = Logger[App]
   def main(args: Array[String]) = {
