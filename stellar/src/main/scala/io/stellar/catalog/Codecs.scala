@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.{JsonAutoDetect, PropertyAccessor}
 import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper, PropertyNamingStrategy}
 import org.apache.iceberg.rest.requests.UpdateTableRequest
-import org.apache.iceberg.rest.responses.{ErrorResponse, LoadTableResponse}
+import org.apache.iceberg.rest.responses.{ConfigResponse, ErrorResponse, LoadTableResponse}
 import org.apache.iceberg.rest.{RESTMessage, RESTSerializers}
 import sttp.tapir.Codec.JsonCodec
 import sttp.tapir.{Codec, DecodeResult, Schema}
@@ -23,13 +23,12 @@ object Codecs {
     mapper
   }
 
-  private def decode[T <: RESTMessage](s: String): DecodeResult[T]  = {
-    throw new UnsupportedOperationException("")
-//    try {
-//      DecodeResult.Value(Codecs.mapper.readValue(s, tag.runtimeClass.asInstanceOf[Class[T]]))
-//    } catch {
-//      case e: Exception => DecodeResult.Error(s, e)
-//    }
+  private[catalog] def decode[T <: RESTMessage : ClassTag](s: String): DecodeResult[T]  = {
+    try {
+      DecodeResult.Value(Codecs.mapper.readValue(s, implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]]))
+    } catch {
+      case e: Exception => DecodeResult.Error(s, e)
+    }
   }
 
   private def encode[T <: RESTMessage](msg: T): String = mapper.writeValueAsString(msg)
@@ -41,4 +40,5 @@ object Codecs {
 
   implicit val loadTableRespCodec: JsonCodec[LoadTableResponse] = jsonCodec[LoadTableResponse]
   implicit val updateTableRequestCodec: JsonCodec[UpdateTableRequest] = jsonCodec[UpdateTableRequest]
+  implicit val configResponseCodec: JsonCodec[ConfigResponse] = jsonCodec[ConfigResponse]
 }

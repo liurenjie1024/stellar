@@ -1,22 +1,25 @@
 package io.stellar
 
 import com.typesafe.scalalogging.Logger
-import io.stellar.catalog.Endpoints
+import io.stellar.catalog.{CatalogModule, Endpoints}
+import pureconfig.ConfigSource
+import pureconfig.generic.auto._
 import sttp.tapir.server.netty.{NettyFutureServer, NettyFutureServerOptions, NettyOptions}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, Future}
 import scala.io.StdIn
-import ExecutionContext.Implicits.global
 
 
 object App {
   private val logger = Logger[App]
-  def main(args: Array[String]) = {
-    println("Hello, world!")
-    logger.debug(s"First debug info!")
+  def main(args: Array[String]): Unit = {
+    logger.info("Starting Stellar REST backend...")
 
-    val nettyOptions = NettyOptions.default.port(8090)
+    val config = ConfigSource.default.loadOrThrow[AppConfig]
+
+    val nettyOptions = NettyOptions.default.port(config.server.port)
     val serverLogger = NettyFutureServerOptions.defaultServerLog
       .copy(logWhenReceived = true)
       .logWhenHandled(true)
@@ -28,13 +31,15 @@ object App {
       .options
       .nettyOptions(nettyOptions)
 
+    val catalogModule = new CatalogModule(config.iceberg.catalog)
+
     val program = {
       for {
         binding <- NettyFutureServer(nettySeverOptions)
-          .addEndpoints(Endpoints.serverEndpoints)
+          .addEndpoints(Endpoints.serverEndpoints(catalogModule.restCatalogAdapter))
           .start()
         _ <- Future {
-          println(s"Go to http://localhost:${binding.port}/docs to open SwaggerUI. Press ENTER key to exit.")
+          logger.info("Rest backend started. Press enter to stop.")
           StdIn.readLine()
         }
         stop <- binding.stop()
