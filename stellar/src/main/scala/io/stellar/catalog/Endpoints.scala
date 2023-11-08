@@ -1,17 +1,18 @@
 package io.stellar.catalog
 
+import scala.concurrent.Future
+
 import io.circe.generic.auto._
 import io.stellar.catalog.Codecs._
 import org.apache.iceberg.rest.requests.UpdateTableRequest
-import org.apache.iceberg.rest.responses.{ConfigResponse, LoadTableResponse}
+import org.apache.iceberg.rest.responses.ConfigResponse
+import org.apache.iceberg.rest.responses.LoadTableResponse
 import sttp.model.StatusCode
 import sttp.tapir.EndpointIO.annotations._
 import sttp.tapir._
 import sttp.tapir.generic.auto._
 import sttp.tapir.json.circe._
 import sttp.tapir.server.ServerEndpoint
-
-import scala.concurrent.Future
 
 object Endpoints {
   private val baseEndpoint = endpoint.in("api" / "catalog")

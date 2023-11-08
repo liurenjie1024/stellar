@@ -1,15 +1,19 @@
 package io.stellar
 
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.io.StdIn
+
 import com.typesafe.scalalogging.Logger
-import io.stellar.catalog.{CatalogModule, Endpoints}
+import io.stellar.catalog.CatalogModule
+import io.stellar.catalog.Endpoints
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
-import sttp.tapir.server.netty.{NettyFutureServer, NettyFutureServerOptions, NettyOptions}
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
-import scala.io.StdIn
+import sttp.tapir.server.netty.NettyFutureServer
+import sttp.tapir.server.netty.NettyFutureServerOptions
+import sttp.tapir.server.netty.NettyOptions
 
 object App {
   private val logger = Logger[App]

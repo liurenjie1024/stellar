@@ -2,7 +2,6 @@ package io.stellar
 
 import org.scalatest.funsuite.AnyFunSuite
 import pureconfig.ConfigSource
-import pureconfig._
 import pureconfig.generic.auto._
 
 class ConfigSuite extends AnyFunSuite {

@@ -1,13 +1,15 @@
 package io.stellar.catalog
 
-import com.softwaremill.macwire.{wire, wireWith}
+import scala.jdk.CollectionConverters.MapHasAsJava
+
+import com.softwaremill.macwire.wire
+import com.softwaremill.macwire.wireWith
 import io.stellar.IcebergCatalogConfig
 import io.stellar.catalog.CatalogModule.backendCatalog
 import org.apache.hadoop.conf.Configuration
-import org.apache.iceberg.{CatalogProperties, CatalogUtil}
+import org.apache.iceberg.CatalogProperties
+import org.apache.iceberg.CatalogUtil
 import org.apache.iceberg.catalog.Catalog
-
-import scala.jdk.CollectionConverters.MapHasAsJava
 
 class CatalogModule(val config: IcebergCatalogConfig) {
   lazy val catalog: Catalog = wireWith(backendCatalog _)

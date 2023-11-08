@@ -1,17 +1,22 @@
 package io.stellar.catalog
 
-import com.fasterxml.jackson.annotation.{JsonAutoDetect, PropertyAccessor}
-import com.fasterxml.jackson.core.JsonFactory
-import com.fasterxml.jackson.databind.PropertyNamingStrategies.KebabCaseStrategy
-import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper, PropertyNamingStrategy}
-import org.apache.iceberg.rest.requests.UpdateTableRequest
-import org.apache.iceberg.rest.responses.{ConfigResponse, ErrorResponse, LoadTableResponse}
-import org.apache.iceberg.rest.{RESTMessage, RESTSerializers}
-import sttp.tapir.Codec.JsonCodec
-import sttp.tapir.{Codec, DecodeResult, Schema}
-import sttp.tapir.CodecFormat.Json
-
 import scala.reflect.ClassTag
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.PropertyAccessor
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.KebabCaseStrategy
+import org.apache.iceberg.rest.RESTMessage
+import org.apache.iceberg.rest.RESTSerializers
+import org.apache.iceberg.rest.requests.UpdateTableRequest
+import org.apache.iceberg.rest.responses.ConfigResponse
+import org.apache.iceberg.rest.responses.LoadTableResponse
+import sttp.tapir.Codec
+import sttp.tapir.Codec.JsonCodec
+import sttp.tapir.DecodeResult
+import sttp.tapir.Schema
 
 object Codecs {
   private lazy val mapper = {

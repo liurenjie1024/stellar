@@ -1,15 +1,18 @@
 package io.stellar.catalog
 
+import scala.concurrent.Future
+import scala.language.reflectiveCalls
+
 import io.stellar.MemoryCatalog
 import org.apache.iceberg.rest.responses.ConfigResponse
 import org.scalatest.funspec.AsyncFunSpec
 import org.scalatest.matchers.should.Matchers
+import sttp.client3.SttpBackend
+import sttp.client3.UriContext
+import sttp.client3.quickRequest
 import sttp.client3.testing.SttpBackendStub
-import sttp.client3.{SttpBackend, UriContext, quickRequest}
 import sttp.tapir.DecodeResult.Value
 import sttp.tapir.server.stub.TapirStubInterpreter
-import scala.language.reflectiveCalls
-import scala.concurrent.Future
 
 class RESTCatalogSuite extends AsyncFunSpec with Matchers {
   private def fixture =

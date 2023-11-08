@@ -2,14 +2,23 @@ val tapirVersion = "1.5.1"
 val icebergVersion = "1.4.1"
 val scalaTestVersion = "3.2.17"
 
+inThisBuild(
+  List(
+    onLoadMessage := s"Welcome to scalafix ${version.value}",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision,
+    scalafixScalaBinaryVersion := "2.13"
+  )
+)
+
 lazy val rootProject = (project in file(".")).settings(
   Seq(
     name := "stellar",
     version := "0.1.0-SNAPSHOT",
     organization := "io.stellar",
     scalaVersion := "2.13.12",
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Werror"),
-    libraryDependencies ++= Seq(
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Wunused", "-Werror"),
+      libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-netty-server" % tapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-prometheus-metrics" % tapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % tapirVersion,

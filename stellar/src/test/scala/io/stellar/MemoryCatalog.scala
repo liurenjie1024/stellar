@@ -1,11 +1,18 @@
 package io.stellar
 
-import org.apache.iceberg.Table
-import org.apache.iceberg.catalog.{Catalog, Namespace, SupportsNamespaces, TableIdentifier}
-
 import java.util
+
 import scala.collection.mutable
-import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala, SeqHasAsJava, SetHasAsScala}
+import scala.jdk.CollectionConverters.MapHasAsJava
+import scala.jdk.CollectionConverters.MapHasAsScala
+import scala.jdk.CollectionConverters.SeqHasAsJava
+import scala.jdk.CollectionConverters.SetHasAsScala
+
+import org.apache.iceberg.Table
+import org.apache.iceberg.catalog.Catalog
+import org.apache.iceberg.catalog.Namespace
+import org.apache.iceberg.catalog.SupportsNamespaces
+import org.apache.iceberg.catalog.TableIdentifier
 
 case class NamespaceContent(id: Namespace, tables: mutable.Map[String, Table], props: mutable.Map[String, String])
 class MemoryCatalog(override val name: String) extends Catalog with SupportsNamespaces {
