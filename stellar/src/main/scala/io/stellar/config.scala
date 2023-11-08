@@ -1,4 +1,3 @@
-
 package io.stellar
 
 case class IcebergCatalogConfig(className: String, properties: Map[String, String])

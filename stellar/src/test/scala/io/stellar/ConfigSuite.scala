@@ -11,7 +11,7 @@ class ConfigSuite extends AnyFunSuite {
 
     val expectedConfig = AppConfig(
       ServerConfig(port = 8090),
-      IcebergConfig(IcebergCatalogConfig("Test", Map("a"->"b", "c" -> "d")))
+      IcebergConfig(IcebergCatalogConfig("Test", Map("a" -> "b", "c" -> "d")))
     )
 
     assert(config == expectedConfig)

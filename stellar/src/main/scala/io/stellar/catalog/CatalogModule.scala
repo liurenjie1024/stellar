@@ -21,4 +21,3 @@ object CatalogModule {
     CatalogUtil.buildIcebergCatalog("stellar_rest_backend", props, new Configuration())
   }
 }
-

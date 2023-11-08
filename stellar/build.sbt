@@ -8,6 +8,7 @@ lazy val rootProject = (project in file(".")).settings(
     version := "0.1.0-SNAPSHOT",
     organization := "io.stellar",
     scalaVersion := "2.13.12",
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Werror"),
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-netty-server" % tapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-prometheus-metrics" % tapirVersion,

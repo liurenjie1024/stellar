@@ -11,7 +11,6 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.io.StdIn
 
-
 object App {
   private val logger = Logger[App]
   def main(args: Array[String]): Unit = {
@@ -20,13 +19,15 @@ object App {
     val config = ConfigSource.default.loadOrThrow[AppConfig]
 
     val nettyOptions = NettyOptions.default.port(config.server.port)
-    val serverLogger = NettyFutureServerOptions.defaultServerLog
+    val serverLogger = NettyFutureServerOptions
+      .defaultServerLog
       .copy(logWhenReceived = true)
       .logWhenHandled(true)
       .logAllDecodeFailures(true)
       .logAllDecodeFailures(true)
 
-    val nettySeverOptions = NettyFutureServerOptions.customiseInterceptors
+    val nettySeverOptions = NettyFutureServerOptions
+      .customiseInterceptors
       .serverLog(serverLogger)
       .options
       .nettyOptions(nettyOptions)

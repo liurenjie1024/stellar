@@ -17,12 +17,24 @@ object Endpoints {
   private val baseEndpoint = endpoint.in("api" / "catalog")
 
   @endpointInput("v1/namespaces/{namespace}/tables/{table}")
-  case class UpdateTableInput(@path namespace: String, @path table: String, @jsonbody body: UpdateTableRequest)
+  case class UpdateTableInput(
+      @path
+      namespace: String,
+      @path
+      table: String,
+      @jsonbody
+      body: UpdateTableRequest
+  )
   case class ErrorResponse(message: String, `type`: String, code: Int, stack: Array[String])
-  case class IcebergErrorResponse(@statusCode code: StatusCode, @jsonbody error: ErrorResponse)
+  case class IcebergErrorResponse(
+      @statusCode
+      code: StatusCode,
+      @jsonbody
+      error: ErrorResponse
+  )
 
-
-  val updateTableEndpoint: PublicEndpoint[UpdateTableInput, IcebergErrorResponse, LoadTableResponse, Any] = baseEndpoint.post
+  val updateTableEndpoint: PublicEndpoint[UpdateTableInput, IcebergErrorResponse, LoadTableResponse, Any] = baseEndpoint
+    .post
     .name("updateTable")
     .summary("Commit updates to a table")
     .tag("Catalog API")
@@ -32,44 +44,51 @@ object Endpoints {
 
   val updateTableServerEndpoint: ServerEndpoint[Any, Future] = updateTableEndpoint.serverLogic { _ =>
     Future.successful[Either[IcebergErrorResponse, LoadTableResponse]](
-      Left(IcebergErrorResponse(StatusCode.BadRequest, ErrorResponse("test", "test", 400, Array()))))
+      Left(IcebergErrorResponse(StatusCode.BadRequest, ErrorResponse("test", "test", 400, Array())))
+    )
 
   }
 
   @endpointInput("v1/namespaces/{namespace}/tables/{table}")
-  case class GetTableInput(@path namespace: String, @path table: String)
+  case class GetTableInput(
+      @path
+      namespace: String,
+      @path
+      table: String
+  )
   case class GetTableOutput(name: String)
 
-  private val getTableEndpoint: PublicEndpoint[GetTableInput, IcebergErrorResponse, GetTableOutput, Any] = baseEndpoint.get
+  private val getTableEndpoint: PublicEndpoint[GetTableInput, IcebergErrorResponse, GetTableOutput, Any] = baseEndpoint
+    .get
     .name("getTable")
     .in(EndpointInput.derived[GetTableInput])
     .out(statusCode(StatusCode.Ok).and(jsonBody[GetTableOutput]))
     .errorOut(EndpointOutput.derived[IcebergErrorResponse])
 
   private def getTableServerEndpoint: ServerEndpoint[Any, Future] = getTableEndpoint.serverLogic { _ =>
-    Future.successful[Either[IcebergErrorResponse, GetTableOutput]](
-      Right(GetTableOutput("xx")))
+    Future.successful[Either[IcebergErrorResponse, GetTableOutput]](Right(GetTableOutput("xx")))
   }
 
   @endpointInput("v1/config")
-  private case class GetConfigInput(@query warehouse: Option[String])
+  private case class GetConfigInput(
+      @query
+      warehouse: Option[String]
+  )
 
-  private val getConfigEndpoint: PublicEndpoint[GetConfigInput, IcebergErrorResponse, ConfigResponse, Any] = baseEndpoint.get
-    .name("getConfig")
-    .in(EndpointInput.derived[GetConfigInput])
-    .out(statusCode(StatusCode.Ok).and(stringBodyUtf8AnyFormat(configResponseCodec)))
-    .errorOut(EndpointOutput.derived[IcebergErrorResponse])
+  private val getConfigEndpoint: PublicEndpoint[GetConfigInput, IcebergErrorResponse, ConfigResponse, Any] =
+    baseEndpoint
+      .get
+      .name("getConfig")
+      .in(EndpointInput.derived[GetConfigInput])
+      .out(statusCode(StatusCode.Ok).and(stringBodyUtf8AnyFormat(configResponseCodec)))
+      .errorOut(EndpointOutput.derived[IcebergErrorResponse])
 
-  private def getConfigServerEndpoint(adapter: RestCatalogAdapter): ServerEndpoint[Any, Future] = getConfigEndpoint.serverLogic { _ =>
-    adapter.getConfig
-  }
-
+  private def getConfigServerEndpoint(adapter: RestCatalogAdapter): ServerEndpoint[Any, Future] = getConfigEndpoint
+    .serverLogic { _ =>
+      adapter.getConfig
+    }
 
   def serverEndpoints(adapter: RestCatalogAdapter): List[ServerEndpoint[Any, Future]] = {
-    List(
-      updateTableServerEndpoint,
-      getTableServerEndpoint,
-      getConfigServerEndpoint(adapter)
-    )
+    List(updateTableServerEndpoint, getTableServerEndpoint, getConfigServerEndpoint(adapter))
   }
 }

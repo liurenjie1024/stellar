@@ -1,17 +1,14 @@
 package io.stellar.catalog
 
-import io.stellar.{IcebergCatalogConfig, MemoryCatalog}
-import org.scalatest.{BeforeAndAfterEach, Suite}
-import org.scalatest.funspec.{AnyFunSpec, AsyncFunSpec}
-import org.scalatest.matchers.should.Matchers
-import sttp.client3.{SttpBackend, UriContext, basicRequest, quickRequest}
-import sttp.client3.testing.SttpBackendStub
-import sttp.tapir.server.stub.TapirStubInterpreter
-import io.circe.generic.auto._
+import io.stellar.MemoryCatalog
 import org.apache.iceberg.rest.responses.ConfigResponse
-import sttp.client3.circe._
+import org.scalatest.funspec.AsyncFunSpec
+import org.scalatest.matchers.should.Matchers
+import sttp.client3.testing.SttpBackendStub
+import sttp.client3.{SttpBackend, UriContext, quickRequest}
 import sttp.tapir.DecodeResult.Value
-
+import sttp.tapir.server.stub.TapirStubInterpreter
+import scala.language.reflectiveCalls
 import scala.concurrent.Future
 
 class RESTCatalogSuite extends AsyncFunSpec with Matchers {
